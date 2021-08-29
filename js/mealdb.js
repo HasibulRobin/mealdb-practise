@@ -1,17 +1,22 @@
+document.getElementById('error-messege').style.display = "none";
 const searchFood = () => {
     const searchMeal = document.getElementById('search-meal');
     const searchText = searchMeal.value;
+    document.getElementById('error-messege').style.display = "none";
     if (searchMeal.value == '') {
         alert('You have to search your food..')
     }
     else {
+        searchMeal.value = '';
         const url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`;
         fetch(url)
             .then(res => res.json())
             .then(data => searchMealResult(data.meals))
-        searchMeal.value = '';
-
+            .catch(error => displayError(error))
     }
+};
+const displayError = error => {
+    document.getElementById('error-messege').style.display = "block";
 }
 const searchMealResult = meals => {
     // console.log(meals);
@@ -41,7 +46,6 @@ const mealId = idMeal => {
         .then(res => res.json())
         .then(data => displayMealDetails(data.meals[0]))
 };
-
 const displayMealDetails = meal => {
     const mealCard = document.getElementById('meal-card');
     console.log(meal);
@@ -53,5 +57,4 @@ const displayMealDetails = meal => {
             <a href="${meal.strYoutube}" class="btn btn-danger">Go somewhere</a>
         </div>
     `;
-
 };
